@@ -1,0 +1,19 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+crud,com.example.model,Post,33,0,0,0,12,0,6,0,6,0
+crud,com.example.model,Label,15,0,0,0,6,0,3,0,3,0
+crud,com.example.model,Entity,0,13,0,0,0,6,0,3,0,3
+crud,com.example.model,Status,0,15,0,0,0,3,0,1,0,1
+crud,com.example.model,Writer,6,27,0,0,2,10,1,5,1,5
+crud,com.example,App,4,0,0,0,2,0,1,0,1,0
+crud,com.example.controller,WriterController,74,91,3,3,22,27,4,6,2,5
+crud,com.example.controller,PostController,165,0,6,0,49,0,10,0,7,0
+crud,com.example.controller,LabelController,139,0,4,0,44,0,9,0,7,0
+crud,com.example.view,PostView,143,0,0,0,30,0,9,0,9,0
+crud,com.example.view,LabelView,116,0,0,0,25,0,9,0,9,0
+crud,com.example.view,WriterView,59,84,0,0,12,18,3,6,3,6
+crud,com.example.repository,GsonLabelRepositoryImpl,212,0,20,0,48,0,20,0,10,0
+crud,com.example.repository,GsonWriterRepositoryImpl,8,213,9,11,2,46,9,11,0,10
+crud,com.example.repository,GsonLabelRepositoryImpl.new TypeToken() {...},6,0,0,0,1,0,1,0,1,0
+crud,com.example.repository,GsonPostRepositoryImpl,243,11,28,0,52,4,24,1,10,1
+crud,com.example.repository,GsonWriterRepositoryImpl.new TypeToken() {...},0,6,0,0,0,1,0,1,0,1
+crud,com.example.repository,GsonPostRepositoryImpl.new TypeToken() {...},6,0,0,0,1,0,1,0,1,0

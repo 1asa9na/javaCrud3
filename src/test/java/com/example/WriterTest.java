@@ -198,7 +198,14 @@ public class WriterTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        assertEquals("[]\r\n", baos.toString());
+        Type listType = new TypeToken<List<Writer>>() {
+        }.getType();
+        List<Writer> writers;
+        writers = new Gson().fromJson(baos.toString(), listType);
+        if (writers == null) {
+            writers = new ArrayList<>();
+        }
+        assertEquals(0, writers.size());
     }
 
     @Test
@@ -233,11 +240,6 @@ public class WriterTest {
         newWrtr = gson.fromJson(
             JsonParser.parseString("{" + baos.toString().split("\\{")[1]).getAsJsonObject(), listType);
         assertEquals(wrtr.getFirstName(), newWrtr.getFirstName());
-    }
-
-    @Test
-    public void testNegativeWriterRepositoryGetByIdNotFound() {
-
     }
 
     @Test

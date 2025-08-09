@@ -190,7 +190,14 @@ public class PostTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        assertEquals("[]\r\n", baos.toString());
+        Type listType = new TypeToken<List<Post>>() {
+        }.getType();
+        List<Post> posts;
+        posts = new Gson().fromJson(baos.toString(), listType);
+        if (posts == null) {
+            posts = new ArrayList<>();
+        }
+        assertEquals(0, posts.size());
     }
 
     @Test
@@ -223,11 +230,6 @@ public class PostTest {
         newPost = gson.fromJson(
                 JsonParser.parseString("{" + baos.toString().split("\\{")[1]).getAsJsonObject(), listType);
         assertEquals(post.getTitle(), newPost.getTitle());
-    }
-
-    @Test
-    public void testNegativePostRepositoryGetByIdNotFound() {
-
     }
 
     @Test

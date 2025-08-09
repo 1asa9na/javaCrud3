@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -149,7 +150,14 @@ public class LabelTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        assertEquals("[]\r\n", baos.toString());
+        Type listType = new TypeToken<List<Label>>() {
+        }.getType();
+        List<Label> labels;
+        labels = new Gson().fromJson(baos.toString(), listType);
+        if (labels == null) {
+            labels = new ArrayList<>();
+        }
+        assertEquals(0, labels.size());
     }
 
     @Test

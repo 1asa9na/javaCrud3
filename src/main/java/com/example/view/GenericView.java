@@ -19,9 +19,5 @@ public interface GenericView<T, ID> {
 
     int getNumber(String prompt);
 
-    String getString(String prompt);
-
-    void showError(String message);
-
     void showMessage(String message);
 }

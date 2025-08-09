@@ -44,7 +44,7 @@ public class WriterController implements GenericController<Writer, Long> {
                 }
                 writerRepository.save(writer);
             } catch (IOException e) {
-                writerView.showError(e.getMessage());
+                writerView.showMessage(e.getMessage());
             }
         }
     }
@@ -58,7 +58,7 @@ public class WriterController implements GenericController<Writer, Long> {
             writerView.showMessage("Writer updated successfully.");
             writerView.display(writer);
         } catch (IOException e) {
-            writerView.showError(e.getMessage());
+            writerView.showMessage(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class WriterController implements GenericController<Writer, Long> {
             writerRepository.delete(id);
             writerView.showMessage("Writer deleted successfully.");
         } catch (IOException e) {
-            writerView.showError(e.getMessage());
+            writerView.showMessage(e.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class WriterController implements GenericController<Writer, Long> {
         try {
             writerView.displayList(writerRepository.getAll());
         } catch (IOException e) {
-            writerView.showError(e.getMessage());
+            writerView.showMessage(e.getMessage());
         }
     }
 
@@ -90,10 +90,10 @@ public class WriterController implements GenericController<Writer, Long> {
             if (writer != null) {
                 writerView.display(writer);
             } else {
-                writerView.showError("Writer not found.");
+                writerView.showMessage("Writer not found.");
             }
         } catch (IOException e) {
-            writerView.showError(e.getMessage());
+            writerView.showMessage(e.getMessage());
         }
     }
 }

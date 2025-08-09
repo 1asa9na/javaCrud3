@@ -53,17 +53,6 @@ public class PostView implements GenericView<Post, Long> {
     }
 
     @Override
-    public String getString(String prompt) {
-        output.print(prompt);
-        return scanner.nextLine();
-    }
-
-    @Override
-    public void showError(String message) {
-        output.println("Error: " + message);
-    }
-
-    @Override
     public void showMessage(String message) {
         output.println("Message: " + message);
     }
@@ -71,7 +60,7 @@ public class PostView implements GenericView<Post, Long> {
     @Override
     public Long getID() {
         try {
-            output.print("Enter post ID: ");
+            output.print("Enter ID: ");
             return Long.parseLong(scanner.nextLine());
         } catch (NumberFormatException e) {
             output.println("Error reading input: " + e.getMessage());

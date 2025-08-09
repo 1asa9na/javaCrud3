@@ -35,7 +35,7 @@ public class LabelController implements GenericController<Label, Long> {
                 Label label = this.create(id);
                 labelRepository.save(label);
             } catch (IOException e) {
-                labelView.showError(e.getMessage());
+                labelView.showMessage(e.getMessage());
             }
         }
     }
@@ -49,7 +49,7 @@ public class LabelController implements GenericController<Label, Long> {
             labelView.showMessage("Label updated successfully.");
             labelView.display(label);
         } catch (IOException e) {
-            labelView.showError(e.getMessage());
+            labelView.showMessage(e.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class LabelController implements GenericController<Label, Long> {
             labelRepository.delete(id);
             labelView.showMessage("Label deleted successfully.");
         } catch (IOException e) {
-            labelView.showError(e.getMessage());
+            labelView.showMessage(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class LabelController implements GenericController<Label, Long> {
         try {
             labelView.displayList(labelRepository.getAll());
         } catch (IOException e) {
-            labelView.showError(e.getMessage());
+            labelView.showMessage(e.getMessage());
         }
     }
 
@@ -81,10 +81,10 @@ public class LabelController implements GenericController<Label, Long> {
             if (label != null) {
                 labelView.display(label);
             } else {
-                labelView.showError("Label not found.");
+                labelView.showMessage("Label not found.");
             }
         } catch (IOException e) {
-            labelView.showError(e.getMessage());
+            labelView.showMessage(e.getMessage());
         }
     }
 }

@@ -45,7 +45,7 @@ public class PostController implements GenericController<Post, Long> {
                 }
                 postRepository.save(post);
             } catch (IOException e) {
-                postView.showError(e.getMessage());
+                postView.showMessage(e.getMessage());
             }
         }
     }
@@ -59,7 +59,7 @@ public class PostController implements GenericController<Post, Long> {
             postView.showMessage("Post updated successfully.");
             postView.display(post);
         } catch (IOException e) {
-            postView.showError(e.getMessage());
+            postView.showMessage(e.getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ public class PostController implements GenericController<Post, Long> {
             postRepository.delete(id);
             postView.showMessage("Post deleted successfully.");
         } catch (IOException e) {
-            postView.showError(e.getMessage());
+            postView.showMessage(e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class PostController implements GenericController<Post, Long> {
         try {
             postView.displayList(postRepository.getAll());
         } catch (IOException e) {
-            postView.showError(e.getMessage());
+            postView.showMessage(e.getMessage());
         }
     }
 
@@ -91,10 +91,10 @@ public class PostController implements GenericController<Post, Long> {
             if (post != null) {
                 postView.display(post);
             } else {
-                postView.showError("Post not found.");
+                postView.showMessage("Post not found.");
             }
         } catch (IOException e) {
-            postView.showError(e.getMessage());
+            postView.showMessage(e.getMessage());
         }
     }
 }

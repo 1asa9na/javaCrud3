@@ -28,8 +28,13 @@ public class LabelView implements GenericView<Label, Long> {
 
     @Override
     public int getNumber(String prompt) {
-        output.print(prompt);
-        return Integer.parseInt(scanner.nextLine());
+        try {
+            output.print(prompt);
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            output.println("Error reading input: " + e.getMessage());
+        }
+        return 0;
     }
 
     @Override

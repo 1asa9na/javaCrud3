@@ -236,6 +236,11 @@ public class WriterTest {
     }
 
     @Test
+    public void testNegativeWriterRepositoryGetByIdNotFound() {
+
+    }
+
+    @Test
     public void testNegativeWriterControllerAddException() {
         WriterRepository mockWr = Mockito.mock(WriterRepository.class);
         WriterView mockWv = Mockito.mock(WriterView.class);
@@ -347,20 +352,29 @@ public class WriterTest {
 
     @Test
     public void testNegativeWriterControllerGetOneWasNotFound() {
-        WriterRepository mockWr = Mockito.mock(WriterRepository.class);
-        WriterView mockWv = Mockito.mock(WriterView.class);
         try {
-            Mockito.doReturn(null).when(mockWr).getById(Mockito.anyLong());
-            Mockito.doReturn(1L).when(mockWv).getID();
+            Files.deleteIfExists(Paths.get("src\\test\\resources\\writers8.json"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        WriterRepository wr = new GsonWriterRepositoryImpl("src\\test\\resources\\writers8.json");
+        WriterView mockWv = Mockito.mock(WriterView.class);
+        Mockito.doReturn(2L).when(mockWv).getID();
+
+        try {
+            wr.save(new Writer(1L, "Jane", "Doe", new ArrayList<>()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         WriterController wc = new WriterController(
-            mockWr,
+            wr,
             Mockito.mock(PostRepository.class),
             mockWv
         );
         wc.getOne();
+
         Mockito.verify(mockWv, Mockito.times(1)).showMessage("Writer not found.");
     }
 }

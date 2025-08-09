@@ -1,6 +1,5 @@
 package com.example.repository;
 
-import com.example.model.Label;
 import com.example.model.Post;
 import com.example.model.Status;
 import com.google.gson.GsonBuilder;
@@ -93,27 +92,6 @@ public class GsonPostRepositoryImpl implements PostRepository {
             String json = gsonBuilder.create().toJson(posts);
             outputStream.write(json.getBytes());
         }
-    }
-
-    /**
-     * Adds labels to post.
-     * @param labels
-     * @param id
-     * @throws IOException
-     */
-    public void addLabels(List<Label> labels, Long id) throws IOException {
-        List<Post> posts = readData();
-
-        for (Post post : posts) {
-            if (post.getId().equals(id) && post.getStatus() != Status.DELETED) {
-                for (Label label : labels) {
-                    post.addLabel(label);
-                }
-                break;
-            }
-        }
-
-        writeData(posts);
     }
 
     @Override

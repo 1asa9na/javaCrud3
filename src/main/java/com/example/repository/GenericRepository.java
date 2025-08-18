@@ -1,6 +1,5 @@
 package com.example.repository;
 
-import java.io.IOException;
 import java.util.List;
 /**
  * Generic Repository Interface.
@@ -10,15 +9,13 @@ import java.util.List;
 
 public interface GenericRepository<T, ID> {
 
-    void save(T entity) throws IOException;
+    T getById(ID id) throws Exception;
 
-    T getById(ID id) throws IOException;
+    List<T> getAll() throws Exception;
 
-    List<T> getAll() throws IOException;
+    T save(T entity) throws Exception;
 
-    void update(T entity, ID id) throws IOException;
+    T update(T entity) throws Exception;
 
-    void delete(ID id) throws IOException;
-
-    ID getNextId() throws IOException;
+    void deleteById(ID id) throws Exception;
 }

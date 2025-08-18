@@ -4,9 +4,13 @@ package com.example.model;
  * POJO Label class.
  */
 
-public class Label extends Entity {
+public class Label {
     private Long id;
     private String name;
+
+    public Label() {
+
+    }
 
     /**
      * Label constructor.
@@ -22,7 +26,15 @@ public class Label extends Entity {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

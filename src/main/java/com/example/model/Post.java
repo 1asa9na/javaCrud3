@@ -14,6 +14,7 @@ public class Post{
     private Date updated;
     private PostStatus status;
     private List<Label> labels;
+    private Long writerId;
 
     public Post() {
         
@@ -84,5 +85,13 @@ public class Post{
 
     public void setStatus(PostStatus status) {
         this.status = status;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 }

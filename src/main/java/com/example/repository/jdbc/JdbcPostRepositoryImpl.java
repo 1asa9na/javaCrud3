@@ -108,7 +108,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
     @Override
     public void deleteById(Long id) throws SQLException {
-        String query = "DELETE FROM posts WHERE id = ?";
+        String query = "UPDATE posts SET status = 'DELETED' WHERE id = ?";
         try (
                 Connection conn = getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);

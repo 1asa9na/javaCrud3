@@ -56,10 +56,12 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
         ) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                labels.add(new Label(
-                    rs.getLong("id"),
-                    rs.getString("name")
-                ));
+                labels.add(
+                    new Label(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    )
+                );
             }
         }
         return labels;

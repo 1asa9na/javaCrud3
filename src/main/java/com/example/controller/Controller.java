@@ -1,12 +1,16 @@
 package com.example.controller;
 
+/**
+ * Interface for generic controllers.
+ */
+
 public interface Controller {
 
-    public abstract void create();
+    void create();
 
-    public abstract void update();
+    void update();
 
-    public abstract void delete();
+    void delete();
 
-    public abstract void read();
+    void read();
 }

@@ -1,10 +1,16 @@
 package com.example.controller.admin;
 
-import java.util.List;
 import com.example.controller.LabelController;
 import com.example.model.Label;
 import com.example.service.LabelService;
+import com.example.service.ServiceException;
 import com.example.view.GenericView;
+import com.example.view.ViewException;
+import java.util.List;
+
+/**
+ * Implementation of LabelController with administrator permission.
+ */
 
 public class AdminLabelControllerImpl extends LabelController {
 
@@ -15,58 +21,58 @@ public class AdminLabelControllerImpl extends LabelController {
     @Override
     public void create() {
         try {
-            String name = view.getInputString("Enter name of the label:");
+            String name = getView().getInputString("Enter name of the label:");
             Label label = new Label();
             label.setName(name);
-            Label newLabel = service.save(label);
-            view.showMessage("Label created.");
-            view.showOne(newLabel);
-        } catch (Exception e) {
-            view.showMessage("Error occured during CREATE.");
+            Label newLabel = getService().save(label);
+            getView().showMessage("Label created.");
+            getView().showOne(newLabel);
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void update() {
         try {
-            Long id = view.getInputID("Enter ID of the label:");
-            String name = view.getInputString("Enter name of the label:");
+            Long id = getView().getInputID("Enter ID of the label:");
+            String name = getView().getInputString("Enter name of the label:");
             Label label = new Label(id, name);
-            Label newLabel = service.update(label);
-            view.showMessage("Label updated.");
-            view.showOne(newLabel);
-        } catch (Exception e) {
-            view.showMessage("Error occured during UPDATE.");
+            Label newLabel = getService().update(label);
+            getView().showMessage("Label updated.");
+            getView().showOne(newLabel);
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void delete() {
         try {
-            Long id = view.getInputID("Enter ID of the label:");
-            service.delete(id);
-            view.showMessage("Label " + id + " has been deleted successfully.");
-        } catch (Exception e) {
-            view.showMessage("Error occured during DELETE.");
+            Long id = getView().getInputID("Enter ID of the label:");
+            getService().delete(id);
+            getView().showMessage("Label " + id + " has been deleted successfully.");
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void read() {
         try {
-            String input = view.getInputString("Enter label ID or \"all\" to select all labels.");
-            if (input.equalsIgnoreCase("all")) {
-                List<Label> labels = service.getAll();
-                view.showMany(labels);
+            String input = getView().getInputString("Enter label ID or \"all\" to select all labels.");
+            if ("all".equalsIgnoreCase(input)) {
+                List<Label> labels = getService().getAll();
+                getView().showMany(labels);
             } else {
                 Long id = Long.parseLong(input);
-                Label label = service.getById(id);
-                view.showOne(label);
+                Label label = getService().getById(id);
+                getView().showOne(label);
             }
         } catch (NumberFormatException e) {
-            view.showMessage("Error: wrong input.");
-        } catch (Exception e) {
-            view.showMessage("Error occured on READ.");
+            getView().showMessage("Error: wrong input.");
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 

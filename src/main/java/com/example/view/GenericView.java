@@ -2,11 +2,21 @@ package com.example.view;
 
 import java.util.List;
 
-public interface GenericView<T> {
-    void showMessage(String msg);
-    void showOne(T entity);
-    void showMany(List<T> entity);
+/**
+ * Generic interface for views.
+ *
+ * @param <T> the type of the entity
+ */
 
-    String getInputString(String msg);
-    Long getInputID(String msg);
+public interface GenericView<T> {
+
+    void showMessage(String msg);
+
+    void showOne(T entity);
+
+    void showMany(List<T> entities);
+
+    String getInputString(String msg) throws ViewException;
+
+    Long getInputID(String msg) throws ViewException;
 }

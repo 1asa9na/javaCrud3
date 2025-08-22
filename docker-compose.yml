@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: crud
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 3216
+    ports:
+      - "3306:3306"  # Открываем порт для доступа с хост-машины (для разработки)
+    volumes:
+      - db_data:/var/lib/mysql # Храним данные между перезапусками
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: maven_app
+    ports:
+      - "8080:8080" # Или любой другой порт, который использует ваше приложение
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://db:3306/your_database_name?serverTimezone=UTC # Общее имя для URL базы данных
+      DB_USER: your_user # Общее имя для пользователя базы данных
+      DB_PASSWORD: your_password # Общее имя для пароля базы данных
+      LIQUIBASE_URL: jdbc:mysql://db:3306/your_database_name?serverTimezone=UTC
+      LIQUIBASE_USER: your_user
+      LIQUIBASE_PASSWORD: your_password
+      LIQUIBASE_CHANGE_LOG: classpath:db/changelog/db.changelog-master.xml
+    restart: always
+
+volumes:
+  db_data:

@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface GenericRepository<T, ID> {
 
-    T getById(ID id) throws Exception;
+    T getById(ID id) throws RepositoryException;
 
-    List<T> getAll() throws Exception;
+    List<T> getAll() throws RepositoryException;
 
-    T save(T entity) throws Exception;
+    T save(T entity) throws RepositoryException;
 
-    T update(T entity) throws Exception;
+    T update(T entity) throws RepositoryException;
 
-    void deleteById(ID id) throws Exception;
+    void deleteById(ID id) throws RepositoryException;
 }

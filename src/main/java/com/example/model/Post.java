@@ -1,5 +1,6 @@
 package com.example.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * POJO Post class.
  */
 
-public class Post{
+public class Post {
     private Long id;
     private String content;
     private Date created;
@@ -17,7 +18,7 @@ public class Post{
     private Long writerId;
 
     public Post() {
-        
+        this.labels = new ArrayList<Label>();
     }
 
     /**

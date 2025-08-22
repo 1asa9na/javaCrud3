@@ -1,5 +1,6 @@
 package com.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class Writer {
     private List<Post> posts;
 
     public Writer() {
-        
+        this.posts = new ArrayList<Post>();
     }
 
     /**

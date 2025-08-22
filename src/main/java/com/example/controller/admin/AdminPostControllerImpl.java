@@ -1,79 +1,84 @@
 package com.example.controller.admin;
 
-import java.util.List;
-
 import com.example.controller.ControllerClientStatus;
 import com.example.controller.PostController;
 import com.example.model.Post;
 import com.example.service.PostService;
+import com.example.service.ServiceException;
 import com.example.view.GenericView;
+import com.example.view.ViewException;
+import java.util.List;
+
+/**
+ * Implementation of PostController with admin permission.
+ */
 
 public class AdminPostControllerImpl extends PostController {
 
     public AdminPostControllerImpl(GenericView<Post> view, PostService service) {
         super(view, service);
-        this.clientStatus = ControllerClientStatus.ADMIN;
+        setClientStatus(ControllerClientStatus.ADMIN);
     }
 
     @Override
     public void create() {
         try {
-            Long writerId = view.getInputID("Enter ID of the writer:");
-            String content = view.getInputString("Enter content of the post:");
+            Long writerId = getView().getInputID("Enter ID of the writer:");
+            String content = getView().getInputString("Enter content of the post:");
             Post post = new Post();
             post.setContent(content);
             post.setWriterId(writerId);
-            Post newPost = service.save(post);
-            view.showMessage("Post created.");
-            view.showOne(newPost);
-        } catch (Exception e) {
-            view.showMessage("Error occured during CREATE.");
+            Post newPost = getService().save(post);
+            getView().showMessage("Post created.");
+            getView().showOne(newPost);
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void update() {
         try {
-            Long id = view.getInputID("Enter ID of the post.");
-            String content = view.getInputString("Enter content of the post.");
+            Long id = getView().getInputID("Enter ID of the post.");
+            String content = getView().getInputString("Enter content of the post.");
             Post post = new Post();
             post.setId(id);
             post.setContent(content);
-            Post newPost = service.save(post);
-            view.showMessage("Post updated.");
-            view.showOne(newPost);
-        } catch (Exception e) {
-            view.showMessage("Error occured during UPDATE.");
+            Post newPost = getService().save(post);
+            getView().showMessage("Post updated.");
+            getView().showOne(newPost);
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void delete() {
         try {
-            Long id = view.getInputID("Enter ID of the post.");
-            service.delete(id);
-            view.showMessage("Post " + id + " has been deleted successfully.");
-        } catch (Exception e) {
-            view.showMessage("Error occured during DELETE.");
+            Long id = getView().getInputID("Enter ID of the post.");
+            getService().delete(id);
+            getView().showMessage("Post " + id + " has been deleted successfully.");
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 
     @Override
     public void read() {
         try {
-            String input = view.getInputString("Enter post ID or \"all\" to select all posts.");
-            if (input.equalsIgnoreCase("all")) {
-                List<Post> posts = service.getAll();
-                view.showMany(posts);
+            String input = getView().getInputString("Enter post ID or \"all\" to select all posts.");
+            if ("all".equalsIgnoreCase(input)) {
+                List<Post> posts = getService().getAll();
+                getView().showMany(posts);
             } else {
                 Long id = Long.parseLong(input);
-                Post post = service.getById(id);
-                view.showOne(post);
+                Post post = getService().getById(id);
+                getView().showOne(post);
             }
         } catch (NumberFormatException e) {
-            view.showMessage("Error: wrong input.");
-        } catch (Exception e) {
-            view.showMessage("Error occured on READ.");
+            getView().showMessage("Error: wrong input.");
+        } catch (ServiceException | ViewException e) {
+            getView().showMessage(e.getMessage());
         }
     }
 

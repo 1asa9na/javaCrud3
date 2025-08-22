@@ -108,6 +108,11 @@ public class WriterServiceImpl extends WriterService {
     public Writer update(Writer entity) throws ServiceException {
         try {
             Writer w = getWriterRepository().update(entity);
+            List<Post> posts = getWriterRepository().getAllPostsByWriterId(entity.getId());
+            for (Post p : posts) {
+                p.setLabels(getPostRepository().getAllLabelsByPostId(p.getId()));
+            }
+            w.setPosts(posts);
             return w;
         } catch (RepositoryException e) {
             throw new ServiceException("Exception on service.update", e);
@@ -122,8 +127,7 @@ public class WriterServiceImpl extends WriterService {
             posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
                     && clientStatus == ControllerClientStatus.USER);
             for (Post p : posts) {
-                List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
-                p.setLabels(labels);
+                p.setLabels(getPostRepository().getAllLabelsByPostId(p.getId()));
             }
             w.setPosts(posts);
             return w;

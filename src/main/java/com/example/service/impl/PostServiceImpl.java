@@ -1,7 +1,6 @@
 package com.example.service.impl;
 
 import com.example.controller.ControllerClientStatus;
-import com.example.model.Label;
 import com.example.model.Post;
 import com.example.model.PostStatus;
 import com.example.repository.PostRepository;
@@ -20,15 +19,23 @@ public class PostServiceImpl extends PostService {
         super(repository);
     }
 
+    private void addLabelsForPost(Post p) {
+        p.setLabels(getRepository().getAllLabelsByPostId(p.getId()));
+    }
+
+    private boolean isPostVisibleForClient(Post p, ControllerClientStatus clientStatus) {
+        return !(p.getStatus() == PostStatus.DELETED || p.getStatus() == PostStatus.UNDER_REVIEW
+            && clientStatus == ControllerClientStatus.USER);
+    }
+
     @Override
     public Post getById(Long id, ControllerClientStatus clientStatus) throws ServiceException {
         try {
             Post p = getRepository().getById(id);
-            if (p.getStatus() == PostStatus.DELETED || p.getStatus() == PostStatus.UNDER_REVIEW
-                && clientStatus == ControllerClientStatus.USER) {
+            if (!isPostVisibleForClient(p, clientStatus)) {
                 return null;
             }
-            p.setLabels(getRepository().getAllLabelsByPostId(id));
+            addLabelsForPost(p);
             return p;
         } catch (RepositoryException e) {
             throw new ServiceException("Exception on service.getById", e);
@@ -39,7 +46,7 @@ public class PostServiceImpl extends PostService {
     public Post getById(Long id) throws ServiceException {
         try {
             Post p = getRepository().getById(id);
-            p.setLabels(getRepository().getAllLabelsByPostId(id));
+            addLabelsForPost(p);
             return p;
         } catch (RepositoryException e) {
             throw new ServiceException("Exception on service.getById", e);
@@ -50,11 +57,9 @@ public class PostServiceImpl extends PostService {
     public List<Post> getAll(ControllerClientStatus clientStatus) throws ServiceException {
         try {
             List<Post> posts = getRepository().getAll();
-            posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
-                && clientStatus == ControllerClientStatus.USER);
+            posts.removeIf(p -> !isPostVisibleForClient(p, clientStatus));
             for (Post p : posts) {
-                List<Label> labels = getRepository().getAllLabelsByPostId(p.getId());
-                p.setLabels(labels);
+                addLabelsForPost(p);
             }
             return posts;
         } catch (RepositoryException e) {
@@ -67,8 +72,7 @@ public class PostServiceImpl extends PostService {
         try {
             List<Post> posts = getRepository().getAll();
             for (Post p : posts) {
-                List<Label> labels = getRepository().getAllLabelsByPostId(p.getId());
-                p.setLabels(labels);
+                addLabelsForPost(p);
             }
             return posts;
         } catch (RepositoryException e) {
@@ -79,7 +83,6 @@ public class PostServiceImpl extends PostService {
     @Override
     public Post save(Post entity) throws ServiceException {
         try {
-            entity.setUpdated(entity.getCreated());
             Post p = getRepository().save(entity);
             return p;
         } catch (RepositoryException e) {
@@ -91,12 +94,11 @@ public class PostServiceImpl extends PostService {
     public Post update(Post entity, ControllerClientStatus clientStatus) throws ServiceException {
         try {
             Post p = getRepository().getById(entity.getId());
-            if (p.getStatus() == PostStatus.DELETED || p.getStatus() == PostStatus.UNDER_REVIEW
-                && clientStatus == ControllerClientStatus.USER) {
+            if (!isPostVisibleForClient(p, clientStatus)) {
                 return null;
             }
             p = getRepository().update(entity);
-            p.setLabels(getRepository().getAllLabelsByPostId(p.getId()));
+            addLabelsForPost(p);
             return p;
         } catch (RepositoryException e) {
             throw new ServiceException("Exception on service.update", e);
@@ -107,7 +109,7 @@ public class PostServiceImpl extends PostService {
     public Post update(Post entity) throws ServiceException {
         try {
             Post p = getRepository().update(entity);
-            p.setLabels(getRepository().getAllLabelsByPostId(p.getId()));
+            addLabelsForPost(p);
             return p;
         } catch (RepositoryException e) {
             throw new ServiceException("Exception on service.update", e);
@@ -118,7 +120,7 @@ public class PostServiceImpl extends PostService {
     public void delete(Long id, ControllerClientStatus clientStatus) throws ServiceException {
         try {
             Post p = getRepository().getById(id);
-            if (!p.getStatus().equals(PostStatus.UNDER_REVIEW) || !clientStatus.equals(ControllerClientStatus.USER)) {
+            if (isPostVisibleForClient(p, clientStatus)) {
                 getRepository().deleteById(id);
             }
         } catch (RepositoryException e) {

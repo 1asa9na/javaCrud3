@@ -22,15 +22,25 @@ public class WriterServiceImpl extends WriterService {
         super(writerRepository, postRepository);
     }
 
+    private void filterPostsForClient(List<Post> posts, ControllerClientStatus clientStatus) {
+        posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
+                && clientStatus == ControllerClientStatus.USER);
+    }
+
+    private List<Post> loadPostWithLabelsByWriterId(Long id) throws RepositoryException {
+        List<Post> posts = getWriterRepository().getAllPostsByWriterId(id);
+        for (Post p : posts) {
+            List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
+            p.setLabels(labels);
+        }
+        return posts;
+    }
+
     @Override
     public Writer getById(Long id) throws ServiceException {
         try {
             Writer w = getWriterRepository().getById(id);
-            List<Post> posts = getWriterRepository().getAllPostsByWriterId(id);
-            for (Post p : posts) {
-                List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
-                p.setLabels(labels);
-            }
+            List<Post> posts = loadPostWithLabelsByWriterId(id);
             w.setPosts(posts);
             return w;
         } catch (RepositoryException e) {
@@ -42,13 +52,8 @@ public class WriterServiceImpl extends WriterService {
     public Writer getById(Long id, ControllerClientStatus clientStatus) throws ServiceException {
         try {
             Writer w = getWriterRepository().getById(id);
-            List<Post> posts = getWriterRepository().getAllPostsByWriterId(id);
-            posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
-                    && clientStatus == ControllerClientStatus.USER);
-            for (Post p : posts) {
-                List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
-                p.setLabels(labels);
-            }
+            List<Post> posts = loadPostWithLabelsByWriterId(id);
+            filterPostsForClient(posts, clientStatus);
             w.setPosts(posts);
             return w;
         } catch (RepositoryException e) {
@@ -61,11 +66,7 @@ public class WriterServiceImpl extends WriterService {
         try {
             List<Writer> writers = getWriterRepository().getAll();
             for (Writer w : writers) {
-                List<Post> posts = getWriterRepository().getAllPostsByWriterId(w.getId());
-                for (Post p : posts) {
-                    List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
-                    p.setLabels(labels);
-                }
+                List<Post> posts = loadPostWithLabelsByWriterId(w.getId());
                 w.setPosts(posts);
             }
             return writers;
@@ -79,13 +80,8 @@ public class WriterServiceImpl extends WriterService {
         try {
             List<Writer> writers = getWriterRepository().getAll();
             for (Writer w : writers) {
-                List<Post> posts = getWriterRepository().getAllPostsByWriterId(w.getId());
-                posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
-                        && clientStatus == ControllerClientStatus.USER);
-                for (Post p : posts) {
-                    List<Label> labels = getPostRepository().getAllLabelsByPostId(p.getId());
-                    p.setLabels(labels);
-                }
+                List<Post> posts = loadPostWithLabelsByWriterId(w.getId());
+                filterPostsForClient(posts, clientStatus);
                 w.setPosts(posts);
             }
             return writers;
@@ -108,10 +104,7 @@ public class WriterServiceImpl extends WriterService {
     public Writer update(Writer entity) throws ServiceException {
         try {
             Writer w = getWriterRepository().update(entity);
-            List<Post> posts = getWriterRepository().getAllPostsByWriterId(entity.getId());
-            for (Post p : posts) {
-                p.setLabels(getPostRepository().getAllLabelsByPostId(p.getId()));
-            }
+            List<Post> posts = loadPostWithLabelsByWriterId(w.getId());
             w.setPosts(posts);
             return w;
         } catch (RepositoryException e) {
@@ -123,12 +116,8 @@ public class WriterServiceImpl extends WriterService {
     public Writer update(Writer entity, ControllerClientStatus clientStatus) throws ServiceException {
         try {
             Writer w = getWriterRepository().update(entity);
-            List<Post> posts = getWriterRepository().getAllPostsByWriterId(w.getId());
-            posts.removeIf(p -> p.getStatus().equals(PostStatus.DELETED) || p.getStatus() == PostStatus.UNDER_REVIEW
-                    && clientStatus == ControllerClientStatus.USER);
-            for (Post p : posts) {
-                p.setLabels(getPostRepository().getAllLabelsByPostId(p.getId()));
-            }
+            List<Post> posts = loadPostWithLabelsByWriterId(w.getId());
+            filterPostsForClient(posts, clientStatus);
             w.setPosts(posts);
             return w;
         } catch (RepositoryException e) {

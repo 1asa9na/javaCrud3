@@ -1,0 +1,25 @@
+# Исключаем папку git
+.git
+.gitignore
+
+# Исключаем IDE-шные папки и настройки
+.vscode
+.idea
+
+# Исключаем артефакты сборки Maven/Gradle
+target
+build
+out
+
+# Исключаем системные файлы
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Исключаем Docker-файлы, если не нужны внутри образа
+docker-compose.yml
+Dockerfile
+
+# Исключаем документацию (опционально)
+README.md

@@ -11,9 +11,7 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
     ports:
-      - "3306:3306"
-    volumes:
-      - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql
+      - "3307:3306"
     command: --default-authentication-plugin=mysql_native_password
 
   app:
@@ -26,5 +24,11 @@ services:
       DB_USER: appuser
       DB_PASSWORD: apppass
     working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+      - maven_repo:/root/.m2
     command: >
-      mvn clean package liquibase:update
+      bash -c "mvn clean package && mvn liquibase:update"
+
+volumes:
+  maven_repo:

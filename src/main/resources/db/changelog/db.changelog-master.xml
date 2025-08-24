@@ -1,0 +1,91 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <!-- Создание таблицы writers -->
+    <changeSet id="1" author="you">
+        <createTable tableName="writers">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы posts -->
+    <changeSet id="2" author="you">
+        <createTable tableName="posts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="TEXT"/>
+            <column name="created" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+            <column name="status" type="VARCHAR(25)"/>
+            <column name="writer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="posts"
+            baseColumnNames="writer_id"
+            referencedTableName="writers"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            constraintName="FK_WriterPost"/>
+    </changeSet>
+
+    <!-- Создание таблицы labels -->
+    <changeSet id="3" author="you">
+        <createTable tableName="labels">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы post_labels (связь many-to-many) -->
+    <changeSet id="4" author="you">
+        <createTable tableName="post_labels">
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey 
+            tableName="post_labels" 
+            columnNames="post_id,label_id" 
+            constraintName="PK_post_labels"/>
+
+        <addForeignKeyConstraint
+            baseTableName="post_labels"
+            baseColumnNames="post_id"
+            referencedTableName="posts"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            constraintName="FK_PostLabels_Post"/>
+
+        <addForeignKeyConstraint
+            baseTableName="post_labels"
+            baseColumnNames="label_id"
+            referencedTableName="labels"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            constraintName="FK_PostLabels_Label"/>
+    </changeSet>
+
+</databaseChangeLog>

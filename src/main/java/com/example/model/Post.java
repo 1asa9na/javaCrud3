@@ -4,32 +4,48 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * POJO Post class.
- */
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "posts")
 public class Post {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "created")
     private Date created;
+
+    @Column(name = "updated")
     private Date updated;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private PostStatus status;
-    private List<Label> labels;
+
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private Writer writer;
+
+    @ManyToMany
+    @JoinTable(
+        name = "post_labels",
+        joinColumns = @JoinColumn(name = "post_id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private List<Label> labels = new ArrayList<>();
+
+    @Column(name = "writer_id")
     private Long writerId;
 
     public Post() {
-        this.labels = new ArrayList<Label>();
+        // Default constructor
     }
-
-    /**
-     * Post constructor.
-     * @param id
-     * @param content
-     * @param labels
-     * @param created
-     * @param updated
-     * @param status
-     */
 
     public Post(Long id, String content, Date created, Date updated, PostStatus status, List<Label> labels) {
         this.id = id;

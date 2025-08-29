@@ -1,11 +1,26 @@
 package com.example.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 /**
  * POJO Label class.
  */
 
+@Entity
+@Table(name = "labels")
 public class Label {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
 
     public Label() {
@@ -19,7 +34,7 @@ public class Label {
      */
     public Label(Long id, String name) {
         this.id = id;
-        this.name = name; // Default status
+        this.name = name;
     }
 
     public Long getId() {

@@ -7,7 +7,6 @@ import com.example.repository.WriterRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TransactionRequiredException;
-import jakarta.transaction.Transactional;
 import java.util.List;
 
 public class HibernateWriterRepositoryImpl extends HibernateRepository<Writer, Long> implements WriterRepository {
@@ -17,7 +16,6 @@ public class HibernateWriterRepositoryImpl extends HibernateRepository<Writer, L
     }
 
     @Override
-    @Transactional
     public List<Post> getAllPostsByWriterId(Long id) throws RepositoryException {
         try (EntityManager em = getNewEntityManager()) {
             em.getTransaction().begin();

@@ -7,7 +7,6 @@ import com.example.repository.RepositoryException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TransactionRequiredException;
-import jakarta.transaction.Transactional;
 import java.util.List;
 
 public class HibernatePostRepositoryImpl extends HibernateRepository<Post, Long> implements PostRepository {
@@ -17,7 +16,6 @@ public class HibernatePostRepositoryImpl extends HibernateRepository<Post, Long>
     }
 
     @Override
-    @Transactional
     public List<Label> getAllLabelsByPostId(Long id) throws RepositoryException {
         try (EntityManager em = getNewEntityManager()) {
             Post p = em.find(getEntityClass(), id);
@@ -28,7 +26,6 @@ public class HibernatePostRepositoryImpl extends HibernateRepository<Post, Long>
     }
 
     @Override
-    @Transactional
     public void deleteLabelFromPostById(Long postId, Long labelId) throws RepositoryException {
         try (EntityManager em = getNewEntityManager()) {
             em.getTransaction().begin();
@@ -49,7 +46,6 @@ public class HibernatePostRepositoryImpl extends HibernateRepository<Post, Long>
     }
 
     @Override
-    @Transactional
     public void addLabelToPostById(Long postId, Long labelId) throws RepositoryException {
         try (EntityManager em = getNewEntityManager()) {
             em.getTransaction().begin();

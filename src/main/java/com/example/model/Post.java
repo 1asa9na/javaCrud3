@@ -1,10 +1,27 @@
 package com.example.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.*;
+/**
+ * Hibernate Entity Post class.
+ */
 
 @Entity
 @Table(name = "posts")
@@ -19,9 +36,11 @@ public class Post {
     private String content;
 
     @Column(name = "created")
+    @CreationTimestamp
     private Date created;
 
     @Column(name = "updated")
+    @UpdateTimestamp
     private Date updated;
 
     @Enumerated(EnumType.STRING)
@@ -40,12 +59,22 @@ public class Post {
     )
     private List<Label> labels = new ArrayList<>();
 
-    @Column(name = "writer_id")
+    @Transient
     private Long writerId;
 
     public Post() {
         // Default constructor
     }
+
+    /**
+     * Constructor for Post class.
+     * @param id
+     * @param content
+     * @param created
+     * @param updated
+     * @param status
+     * @param labels
+     */
 
     public Post(Long id, String content, Date created, Date updated, PostStatus status, List<Label> labels) {
         this.id = id;
@@ -110,5 +139,13 @@ public class Post {
 
     public void setWriterId(Long writerId) {
         this.writerId = writerId;
+    }
+
+    public Writer getWriter() {
+        return writer;
+    }
+
+    public void setWriter(Writer writer) {
+        this.writer = writer;
     }
 }

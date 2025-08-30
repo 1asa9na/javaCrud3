@@ -13,6 +13,12 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * Abstract Hibernate implementation of the GenericRepository interface.
+ * @param <T>  the type of the entity
+ * @param <ID> the type of the entity's identifier
+ */
+
 public abstract class HibernateRepository<T, ID> implements GenericRepository<T, ID> {
 
     @PersistenceUnit
@@ -90,7 +96,13 @@ public abstract class HibernateRepository<T, ID> implements GenericRepository<T,
             if (entity != null) {
                 em.remove(entity);
             } else {
-                throw new RepositoryException(entityClass.getName() + " with id " + id + " not found", new NullPointerException());
+                throw new RepositoryException(
+                    entityClass.getName()
+                    + " with id "
+                    + id
+                    + " not found",
+                    new NullPointerException()
+                );
             }
             em.getTransaction().commit();
         } catch (IllegalArgumentException | TransactionRequiredException e) {

@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   db:
     image: mysql:8.0
@@ -11,7 +9,7 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
     ports:
-      - "3307:3306"
+      - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
 
   app:
@@ -28,7 +26,7 @@ services:
       - .:/usr/src/app
       - maven_repo:/root/.m2
     command: >
-      bash -c "mvn clean package && mvn liquibase:update"
+      bash -c "mvn clean package && mvn -e flyway:clean && mvn -e flyway:migrate -X"
 
 volumes:
   maven_repo:

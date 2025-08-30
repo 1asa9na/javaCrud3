@@ -9,6 +9,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TransactionRequiredException;
 import java.util.List;
 
+/**
+ * Hibernate implementation of the WriterRepository interface.
+ */
+
 public class HibernateWriterRepositoryImpl extends HibernateRepository<Writer, Long> implements WriterRepository {
 
     public HibernateWriterRepositoryImpl(EntityManagerFactory entityManagerFactory) {

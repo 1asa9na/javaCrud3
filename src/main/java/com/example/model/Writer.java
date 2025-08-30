@@ -1,8 +1,5 @@
 package com.example.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Hibernate Entity Writer class.
@@ -34,6 +33,14 @@ public class Writer {
 
     public Writer() {
     }
+
+    /**
+     * Constructor for Writer class.
+     * @param id
+     * @param firstName
+     * @param lastName
+     * @param posts
+     */
 
     public Writer(Long id, String firstName, String lastName, List<Post> posts) {
         this.id = id;

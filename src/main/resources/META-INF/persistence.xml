@@ -12,6 +12,8 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>com.example.model.Label</class>
+        <class>com.example.model.Post</class>
+        <class>com.example.model.Writer</class>
 
         <properties>
             

@@ -9,6 +9,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TransactionRequiredException;
 import java.util.List;
 
+/**
+ * Hibernate implementation of the PostRepository interface.
+ */
+
 public class HibernatePostRepositoryImpl extends HibernateRepository<Post, Long> implements PostRepository {
 
     public HibernatePostRepositoryImpl(EntityManagerFactory entityManagerFactory) {
